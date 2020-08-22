@@ -1,0 +1,18 @@
+/* Usage:
+ * 0. Upate the `parishes` JSON array below.
+ * 1. Go to the edit-question-ansers page for a <select>
+ * 1b. Add "Other" and any other special options to the top.
+ * 2. Open the Javascript console.
+ * 3. Paste the below into the Javascript console.
+ * 4. Click Save or whatever
+ */
+add_row = function(text) {
+    jQuery("#parent_qchoice_set tr a.add-row.btn").click();
+    jQuery('#parent_qchoice_set tr.dynamic-form input[type="text"]:not(.available_limit)').get(-1).value = text;
+};
+
+// Define parishes to add
+parishes = {{ parishes | dump }};
+
+
+parishes.forEach(add_row);

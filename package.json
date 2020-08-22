@@ -1,0 +1,25 @@
+{
+  "name": "eventbrite-parishes",
+  "version": "1.0.0",
+  "description": "Load DOR parishes into an Eventbrite custom question",
+  "main": "eventbrite-parishes.js",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "node-fetch": "^2.6.0",
+    "nunjucks": "^3.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exultrochester/eventbrite-parishes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/exultrochester/eventbrite-parishes/issues"
+  },
+  "homepage": "https://github.com/exultrochester/eventbrite-parishes#readme"
+}
