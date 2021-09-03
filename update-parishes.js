@@ -42,6 +42,8 @@ const main = async () => {
     try {
         const parishes = await getParishes();
         parishes.sort()
+        await fs.writeFile('all-parishes.json', JSON.stringify(parishes, null, 2));
+        console.log(`Wrote ${parishes.length} parishes to all-parishes.json`);
 
         const script = nunjucks.render('eventbrite-parishes.js.njk', { parishes });
         await fs.writeFile('eventbrite-parishes.js', script);
