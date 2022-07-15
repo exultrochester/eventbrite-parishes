@@ -10,6 +10,15 @@ const ADD_PARISHES = [
     "St. Alban's Catholic Church",
 ]
 
+const cluster_fix = /(.*?) *\(#\d+\)/;
+
+const getParishName = ({ cluster, name, town }) => {
+    if (cluster === name || !cluster) {
+        return `${name} (${town})`;
+    }
+    return `${name} (${cluster} - ${town})`;
+}
+
 nunjucks.configure('.', { autoescape: false });
 const getParishes = async () => {
     const res = await fetch("https://www.dor.org/parishes-campuses-cemeteries/parish-locator-and-mass-times/", {
@@ -28,12 +37,27 @@ const getParishes = async () => {
 
     const text = await res.text();
 
+    let cluster = '';
     const $ = cheerio.load(text);
-    const names = $('table > tbody > tr').map((i, e) => {
-        const cols = $('td', e).map((i, e) => $(e).text()).toArray();
-        const [ town, name ] = cols;
-        return `${name} (${town})`;
-    });
+    const names = $('table > tbody > tr')
+        .map((i, e) => {
+            const cols = $('td', e).map((i, e) => $(e).text()).toArray();
+            if (cols.length === 1) {
+                cluster = cols[0];
+                if (cluster === 'Individual') {
+                    cluster = '';
+                }
+                const match = cluster_fix.exec(cluster);
+                if (match) {
+                    cluster = match[1];
+                }
+            }
+            const [town, name] = cols;
+            return { name, town, cluster };
+        })
+        // .map((i, o) => { console.log(o); return o })
+        .filter((i, { name }) => name !== undefined)
+        .map((i, { town, name, cluster }) => getParishName({ town, name, cluster }));
 
     return names.toArray();
 };
@@ -44,6 +68,9 @@ const main = async () => {
         parishes.sort()
         await fs.writeFile('all-parishes.json', JSON.stringify(parishes, null, 2));
         console.log(`Wrote ${parishes.length} parishes to all-parishes.json`);
+
+        await fs.writeFile('all-parishes.txt', parishes.join('\n'));
+        console.log(`Wrote ${parishes.length} parishes to all-parishes.txt`);
 
         const script = nunjucks.render('eventbrite-parishes.js.njk', { parishes });
         await fs.writeFile('eventbrite-parishes.js', script);

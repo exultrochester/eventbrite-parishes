@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Load DOR parishes into an Eventbrite custom question",
   "main": "eventbrite-parishes.js",
+  "type": "module",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "node-fetch": "^2.6.1",
