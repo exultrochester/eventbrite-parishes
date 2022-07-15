@@ -72,10 +72,7 @@ const main = async () => {
         await fs.writeFile('all-parishes.txt', parishes.join('\n'));
         console.log(`Wrote ${parishes.length} parishes to all-parishes.txt`);
 
-        const script = nunjucks.render('eventbrite-parishes.js.njk', { parishes });
-        await fs.writeFile('eventbrite-parishes.js', script);
-        console.log('Wrote eventbrite-parishes.js')
-        console.log('Open that file in Notepad and follow the instructions.')
+        console.log('Run update-eventbrite-questions.js to create the Parish cutom question on an event.')
     } catch (err) {
         console.error(err);
     }
